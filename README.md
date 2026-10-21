@@ -9,7 +9,7 @@ configured using a single file in your project root, and will:
 - highlight TODOs and collect them in one place,
 - and give you a static site, a live-reloading preview, and/or a single PDF.
 
-It's one small binary(~8MB) with no runtime dependencies. The generated site is built to work on any host, whether it be locally hosted, on a cloud fileshare, or used as a public documentation website.
+It's one small binary(~8MB) with no runtime dependencies. The generated site is built to work on any host, whether it be locally hosted, on a cloud fileshare, or used as a public documentation website. Check out [https://satellitedish.github.io/dokt/src/config/Config.html](https://satellitedish.github.io/dokt/README.html) for the full documentation.
 
 ## Contents
 
