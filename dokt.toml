@@ -1,0 +1,22 @@
+title = "dokt"
+out_dir = "dokt-out"
+
+exclude = ["/examples"]
+
+[todos]
+markers = ["FIXME"] # Cannot use TODO because it is said in the README to explain features
+
+[brand]
+footer = "Generated using dokt"
+
+[theme]
+[theme.dark]
+bg = "#111111"
+fg = "#FFFFFF"
+muted = "#C4C4C4"
+line = "#560E08"
+soft = "#222222"
+accent = "#F33030"
+broken = "#FF8147"
+todo = "#F33030"
+

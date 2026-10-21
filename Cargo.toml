@@ -1,0 +1,27 @@
+[package]
+name = "dokt"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.89"
+description = "Build documentation from Markdown that lives inside a repo. Navigate using Obsidian-style wikilinks, render Mermaid, and build or serve a static docs site."
+license = "MIT"
+readme = "README.md"
+keywords = ["docs", "documentation", "markdown"]
+categories = ["command-line-utilities", "development-tools"]
+
+[dependencies]
+anyhow = "1"
+base64 = "0.23.1"
+clap = { version = "4", features = ["derive"] }
+comrak = { version = "0.56", default-features = false }
+globset = "0.4"
+ignore = "0.4"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tiny_http = "0.12"
+toml = "1"
+tungstenite = { version = "0.30.0", default-features = false, features = ["handshake"] }
+
+[profile.release]
+lto = true
+strip = true

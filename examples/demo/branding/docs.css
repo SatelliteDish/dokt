@@ -1,0 +1,6 @@
+/* Example custom stylesheet. It is linked after the built-in styles, so
+   anything here wins. The colors and --sidebar/--sans/--mono are CSS variables. */
+:root { --sidebar: 16rem; }
+article h1 { letter-spacing: -0.02em; }
+article h2 { border-bottom-style: dashed; }
+article a[data-wikilink] { text-decoration-thickness: 2px; text-underline-offset: 3px; }

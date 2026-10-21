@@ -1,0 +1,4 @@
+- [ ] Add code colorization for code blocks
+- [ ] Crush directories in the side panel if empty only they have one child. Meaning to make the entire path section act as one segment
+- [ ] Finish block references
+- [ ] Allow logo size to be customized through config file

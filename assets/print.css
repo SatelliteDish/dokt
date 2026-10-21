@@ -1,0 +1,62 @@
+/* Print layout for the PDF export (dokt export --pdf).
+ *
+ * Loaded after style.css (typography for article content, code, tables, alerts,
+ * TODO marks) and print-theme.css (the light palette from dokt.toml), and
+ * before the user's own stylesheets. This file only deals with the page: the
+ * cover, the contents, page breaks, and making content fit on paper. The paper
+ * size and margins come from an @page rule written into the document itself.
+ */
+
+/* The site is a two-column grid with a sidebar; the PDF is one column. */
+body.print { display: block; min-height: 0; background: #fff; font-size: 10.5pt; line-height: 1.5; }
+body.print main { padding: 0; }
+body.print article { max-width: none; }
+
+/* Cover page. */
+.cover { padding-top: 55mm; break-after: page; }
+.cover-logo { height: 28mm; width: auto; max-width: 70mm; margin-bottom: 10mm; }
+.cover-title { margin: 0 0 4mm; font-size: 34pt; line-height: 1.15; letter-spacing: -0.01em; }
+.cover-meta { margin: 0; color: var(--muted); font-size: 12pt; }
+.cover-footer { margin: 40mm 0 0; color: var(--muted); font-size: 10pt; }
+
+/* Contents: the sidebar tree, as a list. */
+.toc { break-after: page; }
+.toc h1 { margin: 0 0 6mm; font-size: 22pt; }
+.toc ul { list-style: none; margin: 0; padding-left: 0; }
+.toc ul ul { padding-left: 6mm; margin: 1mm 0 2mm; border-left: 1px solid var(--line); }
+.toc li { margin: 1.2mm 0; }
+.toc a { text-decoration: none; }
+.toc .toc-dir > span { color: var(--muted); font-weight: 600; }
+.toc .toc-appendix { margin-top: 6mm; padding-top: 3mm; border-top: 1px solid var(--line); }
+
+/* Every page of the docs starts on a new sheet. */
+.doc-page { break-before: page; }
+.doc-path { margin: 0 0 2mm; color: var(--muted); font: 8pt/1.2 var(--mono); }
+.doc-page h1 { margin-top: 0; font-size: 22pt; }
+
+/* Keep headings with what follows them, and avoid splitting small blocks. */
+h1, h2, h3, h4 { break-after: avoid; }
+img, svg, table, blockquote, .markdown-alert, pre.mermaid { break-inside: avoid; }
+tr { break-inside: avoid; }
+img { max-height: 225mm; }
+pre.mermaid svg { max-width: 100%; height: auto; }
+/* A diagram that could not be drawn is shown as its source, marked as an error. */
+pre.mermaid.mermaid-failed {
+  padding: 3mm 4mm;
+  border: 1px dashed var(--broken);
+  background: var(--soft);
+  font-family: var(--mono);
+  font-size: 8.5pt;
+  text-align: left;
+  white-space: pre-wrap;
+}
+
+/* Long code lines wrap instead of running off the page. */
+pre { white-space: pre-wrap; overflow-wrap: anywhere; break-inside: auto; }
+table { display: table; width: 100%; }
+
+/* Print the colors (TODO highlights, table headers, alert bars) as they are. */
+* { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+/* Heading anchor links are only useful on screen. */
+.anchor { display: none; }
