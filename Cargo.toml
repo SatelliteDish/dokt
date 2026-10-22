@@ -5,6 +5,7 @@ edition = "2021"
 rust-version = "1.89"
 description = "Build documentation from Markdown that lives inside a repo. Navigate using Obsidian-style wikilinks, render Mermaid, and build or serve a static docs site."
 license = "MIT"
+repository = "https://github.com/SatelliteDish/dokt"
 readme = "README.md"
 keywords = ["docs", "documentation", "markdown"]
 categories = ["command-line-utilities", "development-tools"]
@@ -25,3 +26,8 @@ tungstenite = { version = "0.30.0", default-features = false, features = ["hands
 [profile.release]
 lto = true
 strip = true
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
