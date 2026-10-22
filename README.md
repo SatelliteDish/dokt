@@ -1,6 +1,6 @@
 # dokt
 
-`dokt`lets you turn Markdown files already scattered through a project into a documentation site. It's
+`dokt` lets you turn Markdown files already scattered through a project into a documentation site. It's
 configured using a single file in your project root, and will:
 
 - crawl the project's Markdown files
