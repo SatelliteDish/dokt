@@ -9,30 +9,62 @@ configured using a single file in your project root, and will:
 - highlight TODOs and collect them in one place,
 - and give you a static site, a live-reloading preview, and/or a single PDF.
 
-It's one small binary(~8MB) with no runtime dependencies. The generated site is built to work on any host, whether it be locally hosted, on a cloud fileshare, or used as a public documentation website. Find the full documentation [here](https://satellitedish.github.io/dokt/README.html).
+It's one small binary(~8MB) with no runtime dependencies. The generated site is built to work on any host, whether it be locally hosted, on a cloud fileshare, or used as a public documentation website. To see a demo or find more information you can view the full docs [here](https://satellitedish.github.io/dokt/README.html), which are generated with `dokt`.
 
 ## Contents
 
 - [Installation](#installation)
+    - [Npm](#npm)
+    - [Cargox](#cargox)
+    - [Source](#source)
 - [Quick start](#quick-start)
 - [Commands](#commands)
-- [Choosing what is published](#choosing-what-is-published)
 - [Keyboard Navigation](#keyboard-navigation)
 - [Configuration reference](#configuration-reference)
 - [Known limits](#known-limits)
 
+### See Also
+
+- [Configuration](src/config/Config.md)
+- [Branding](/src/config/Branding.md)
+- [Themes](src/theme/Themes.md)
+
 ## Installation
 
-You need [Rust](https://www.rust-lang.org/tools/install) 1.89 or newer.
+### npm
+There are two ways to install using `npm`:
+
+```bash
+npx @sortofrad/dokt init   # you do not need to add `dokt` as a dependency to use it
+
+# or
+
+npm install --save-dev @sortofrad/dokt
+npx dokt init    # adding as a dependency allows you to use the shorter name
+```
+
+It's recommended to add `dokt` as a dependency for ease of use, but you do not have to.
+
+### cargox
+It's recommended to use `dokt` through [`cargox`](https://github.com/pkgxdev/cargox) for Rust projects:
+
+```bash
+carogx dokt init
+```
+
+And that's it. You can install `dokt` as a dependency with `cargo install --dev dokt` but there isn't any benefit to doing so.
+
+### Source
+To install from source you need [Rust](https://www.rust-lang.org/tools/install) 1.89 or newer.
 
 ```bash
 cargo build --release
 ```
 
-The compiled binary can be found at `target/release/dokt`. You can test it on the demo project included,
+The compiled binary can be found at `target/release/dokt`. You can test it out on the source itself:
+
 ```bash
-cd examples/demo
-../../target/release/dokt serve
+./target/release/dokt serve
 ```
 
 ## Quick start
@@ -45,7 +77,7 @@ dokt export --web  # the static site, in dokt-out/ by default
 dokt export --pdf  # one PDF, dokt-out/<title>.pdf
 ```
 
-`dokt.toml` marks the project root. An empty file is valid,  every option has a default it will fall back to. By default every Markdown file in the project becomes a page, and `node_modules/`, `.git/` and `target/` are ignored.
+`dokt.toml` marks the project root. An empty file is valid, every option has a default it will fall back to. By default every Markdown file in the project becomes a page, and by default `node_modules/`, `.git/`, and `target/` are ignored. You can find a full list configuration options and default values [here](/src/config/Config.md).
 
 ## Commands
 
@@ -60,23 +92,10 @@ Every command finds `dokt.toml` in the current directory or the nearest parent. 
 
 `--strict` (on `build` and `export`) turns warnings such as broken links into a failing exit code, which is useful in CI. `serve` notices changes by re-scanning once a second, and also picks up edits to `dokt.toml`, your stylesheets, and your logo.
 
-## Choosing what is published
-
-All paths are relative to `dokt.toml`.
-
-```toml
-include = ["README.md", "docs/**", "packages/*/README.md"]   # default: ["**"]
-exclude = ["CHANGELOG.md", "docs/drafts/"]                   # gitignore-style
-```
-
-- **`include`** is a list of globs. `*` stays inside one folder and `**` crosses folders.
-- **`exclude`** uses `.gitignore` syntax, so `drafts/` skips a folder anywhere and `/vendor/` only the one at the root. Exclusion has higher priority than inclusion, so **if a directory matches any exclusion pattern it is never crawled**. This means a large `node_modules` will **not cost anything** if excluded.
-- `node_modules/`, `.git/` and `/target/` are skipped by default (`default_excludes`), and `.gitignore` files are honoured (`respect_gitignore`). Dotfiles and dot-folders are skipped. All of this can be changed through config
-- Markdown (`.md`, `.markdown`) becomes pages. Images and PDFs that match `include` are copied. You don't need to explicitly include any files actually used in a page, those will be copied regardless of if they're included or not.
-
-`dokt` writes only into `out_dir` (default `dokt-out`). It refuses to write into a non-empty folder it did not create, and never into the project root or one of its parents.
 
 ## Keyboard Navigation
+
+The generated website comes with a number of keybinds for easy keyboard navigation.
 
 | Key | Action |
 | --- | ------ |
@@ -94,8 +113,7 @@ The filter matches every word you type against page titles and paths. Shortcuts 
 
 ## Configuration reference
 
-Every key is optional. Unknown keys are an error, so typos do not pass silently. Run `dokt init`
-for a commented starting file.
+Every key is optional. Unknown keys are an error, so typos do not pass silently. Run `dokt init` for a commented starting file.
 
 | Key | Default | Meaning |
 | --- | ------- | ------- |

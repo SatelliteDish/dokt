@@ -16,6 +16,17 @@ These have to come before any of the config below.
 | `allow_html` | `true` | allow raw HTML to pass through Markdown |
 | `css` | `[]` | paths to additional stylesheets. Imported with priority over the standard styles |
 
+
+### Choosing what is published
+
+- **`include`** is a list of globs. `*` stays inside one folder and `**` crosses folders.
+- **`exclude`** uses `.gitignore` syntax, so `drafts/` skips a folder named drafts anywhere and `/vendor/` only one if it's at the root.
+- Exclusion has higher priority than inclusion, so **if a directory matches any exclusion pattern it is never crawled**. This means a large `node_modules` will **not cost anything** if excluded.
+- `node_modules/`, `.git/` and `/target/` are skipped by default (`default_excludes`), and `.gitignore` files are honoured (`respect_gitignore`). Dotfiles and dot-folders are skipped. All of this can be changed through config
+- Markdown (`.md`, `.markdown`) becomes pages. Images and PDFs that match `include` are copied. You don't need to explicitly include any files actually used in a page, those will be copied regardless of if they're included or not.
+
+All paths are relative to `dokt.toml`. `dokt` writes only into `out_dir`. It refuses to write into a non-empty folder it did not create, and never into the project root or one of its parents.
+
 ### Example
 
 ```toml
@@ -24,7 +35,6 @@ out_dir = "docs_out"
 respect_gitignore = false
 css = ["assets/globals.css"]
 ```
-
 
 ## TODOs
 These options are part of the `[todos]` table. They offer control over how the TODOs are parsed and understood. See [[Todos]] for more
