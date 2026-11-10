@@ -393,7 +393,7 @@ dependencies = [
 
 [[package]]
 name = "dokt"
-version = "0.1.2"
+version = "0.1.21"
 dependencies = [
  "anyhow",
  "base64",

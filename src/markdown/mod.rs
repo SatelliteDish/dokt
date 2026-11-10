@@ -6,7 +6,7 @@ use crate::todo::{self, TodoEntry};
 use comrak::nodes::{NodeLink, NodeValue};
 use comrak::options::Plugins;
 use comrak::plugins::syntect::SyntectAdapterBuilder;
-use comrak::{Anchorizer, Arena, Options, format_html_with_plugins, parse_document, plugins};
+use comrak::{Anchorizer, Arena, Options, format_html_with_plugins, parse_document};
 use syntect::highlighting::ThemeSet;
 use syntect::html::css_for_theme_with_class_style;
 use std::collections::HashMap;
@@ -25,7 +25,11 @@ fn ext_of(path: &str) -> Option<String> {
 
 /// Accepts a bare extension (`png`) or anything with one (`a/b.png`).
 pub fn is_asset(path_or_ext: &str) -> bool {
-    let ext = if path_or_ext.contains('.') { ext_of(path_or_ext) } else { Some(path_or_ext.to_ascii_lowercase()) };
+    let ext = if path_or_ext.contains('.') {
+        ext_of(path_or_ext)
+    } else {
+        Some(path_or_ext.to_ascii_lowercase())
+    };
     ext.map_or(false, |e| IMAGE_EXTS.contains(&e.as_str()) || OTHER_ASSET_EXTS.contains(&e.as_str()))
 }
 
