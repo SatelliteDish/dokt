@@ -4,7 +4,7 @@ members = ["cargo:."]
 # Config for 'dist'
 [dist]
 # The preferred dist version to use in CI (Cargo.toml SemVer syntax)
-cargo-dist-version = "0.33.0"
+cargo-dist-version = "0.33.1"
 # CI backends to support
 ci = "github"
 # The installers to generate for each app
@@ -17,3 +17,6 @@ install-path = "CARGO_HOME"
 install-updater = false
 # A namespace to use when publishing this package to the npm registry
 npm-scope = "@sortofrad"
+
+[dist.github-custom-runners]
+aarch64-apple-darwin = "macos-latest"
