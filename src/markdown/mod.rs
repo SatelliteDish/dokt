@@ -4,7 +4,11 @@
 use crate::config::Todos;
 use crate::todo::{self, TodoEntry};
 use comrak::nodes::{NodeLink, NodeValue};
-use comrak::{format_html, parse_document, Anchorizer, Arena, Options};
+use comrak::options::Plugins;
+use comrak::plugins::syntect::SyntectAdapterBuilder;
+use comrak::{Anchorizer, Arena, Options, format_html_with_plugins, parse_document, plugins};
+use syntect::highlighting::ThemeSet;
+use syntect::html::css_for_theme_with_class_style;
 use std::collections::HashMap;
 use std::path::Path;
 
@@ -382,8 +386,28 @@ pub fn render(source: &str, page_rel: &str, page_html: &str, ctx: &Ctx) -> Rende
         Vec::new()
     };
 
+
+    let theme_css = |themes: &ThemeSet, name: &str| {
+        let theme = &themes.themes[name]; // Panics if name is unknown
+        let css = css_for_theme_with_class_style(theme, syntect::html::ClassStyle::Spaced).unwrap();
+        css.replacen(".code {", "pre.syntax-highlighting", 1)
+
+    };
+
+    let adapter = SyntectAdapterBuilder::new().css().build();
+    let mut plugins = Plugins::default();
+    plugins.render.codefence_syntax_highlighter = Some(&adapter);
+
+    let themes = ThemeSet::load_defaults();
+    let light = theme_css(&themes, "Solarized (light)");
+    let dark = theme_css(&themes, "Solarized (dark)");
+
+    let code_stylesheet = format!(
+        "{light}\n@media (prefers-color-shceme: dark) {{\n{dark}\n}}"
+    );
+
     let mut html = String::new();
-    format_html(root, &options, &mut html).expect("writing to a String cannot fail");
+    format_html_with_plugins(root, &options, &mut html, &plugins).expect("writing to a String cannot fail");
     // Let the browser defer off-screen images (covers comrak's own tags and ours).
     // Not in a PDF: the browser must have every image loaded before it prints.
     let html = match ctx.target {
@@ -393,7 +417,14 @@ pub fn render(source: &str, page_rel: &str, page_html: &str, ctx: &Ctx) -> Rende
 
     assets.sort();
     assets.dedup();
-    Rendered { title: fm_title.or(h1_title), html, warnings, todos, has_h1, assets }
+    Rendered {
+        title: fm_title.or(h1_title),
+        html: format!("<style>{code_stylesheet}</style>\n{html}"),
+        warnings,
+        todos,
+        has_h1,
+        assets
+    }
 }
 
 // ---------- link and embed resolution ----------
